@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     working_directory: .
     integrations:
-      app_store_connect: AppleDeveloper
+      app_store_connect: AppleDeveloper # The updated name for your App Store Connect integration
     environment:
       groups:
         - ios_creds # Ensure this group includes the necessary environment variables
@@ -34,7 +34,7 @@ workflows:
           keychain initialize
       - name: Fetch signing files
         script: |
-          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create
+          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create --issuer-id $APP_STORE_CONNECT_ISSUER_ID --key-id $APP_STORE_CONNECT_KEY_IDENTIFIER --private-key $APP_STORE_CONNECT_PRIVATE_KEY
       - name: Use system default keychain
         script: |
           keychain add-certificates
@@ -52,7 +52,7 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        auth: integration  # This references your configured App Store Connect integration
+        auth: integration  # Ensure this matches your integration reference
       email:
         recipients:
           - pita.sherwood@protonmail.com
