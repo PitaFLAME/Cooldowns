@@ -4,8 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     working_directory: .
     integrations:
-      app_store_connect:
-        - integration_id: AppleDeveloper
+      app_store_connect: AppleDeveloper
     environment:
       groups:
         - ios_creds
