@@ -1,0 +1,61 @@
+workflows:
+  ios-automatic-code-signing:
+    name: iOS automatic code signing
+    instance_type: mac_mini_m1
+    working_directory: .
+    environment:
+      groups:
+        - ios_creds
+      vars:
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+        BUNDLE_ID: "blue.pita.cooldowns"
+        APP_STORE_APP_ID: 6520381456
+      xcode: 14.3
+      cocoapods: default
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: "develop"
+          include: true
+          source: true
+    scripts:
+      - name: Install pods
+        working_directory: ios
+        script: pod install
+      - name: Set up keychain to be used for codesigning using Codemagic CLI 'keychain' command
+        script: keychain initialize
+      - name: Fetch signing files
+        script: app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create
+      - name: Use system default keychain
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID") + 1))
+      - name: Build ipa for distribution
+        working_directory: .
+        script: xcode-project build-ipa --workspace "$XCODE_WORKSPACE" --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+      email:
+        recipients:
+          - pita.sherwood@protonmail.com
+        notify:
+          success: true
+          failure: true
+      slack:
+        channel: "#ce-builds"
+        notify_on_build_start: true
+        notify:
+          success: false
+          failure: false
