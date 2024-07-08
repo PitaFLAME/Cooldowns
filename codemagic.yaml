@@ -3,6 +3,9 @@ workflows:
     name: iOS automatic code signing
     instance_type: mac_mini_m1
     working_directory: .
+    integrations:
+      app_store_connect:
+        name: CodeMagic  # Replace with your actual integration name
     environment:
       groups:
         - ios_creds # Ensure this group includes the necessary environment variables
