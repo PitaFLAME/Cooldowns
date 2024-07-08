@@ -5,18 +5,15 @@ workflows:
     working_directory: .
     integrations:
       app_store_connect:
-        - integration_id: AppleDeveloper # Ensure this matches your integration name
+        integration_id: AppleDeveloper
     environment:
       groups:
-        - ios_creds # Ensure this group includes the necessary environment variables like APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_IDENTIFIER, and APP_STORE_CONNECT_PRIVATE_KEY
+        - ios_creds
       vars:
         XCODE_WORKSPACE: "Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
         BUNDLE_ID: "blue.pita.cooldowns"
         APP_STORE_APP_ID: 6520381456
-        APP_STORE_CONNECT_ISSUER_ID: "9c9d7268-e70e-4477-a318-2e88b38a20e6"
-        APP_STORE_CONNECT_KEY_IDENTIFIER: "9SJRL5BCG9"
-        # Do not set the private key here; rely on the integration for security reasons
       xcode: 15.4
       cocoapods: default
     triggering:
@@ -56,8 +53,7 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        auth:
-          integration: AppleDeveloper
+        auth: integration
       email:
         recipients:
           - pita.sherwood@protonmail.com
