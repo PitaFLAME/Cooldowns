@@ -4,8 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     working_directory: .
     integrations:
-      app_store_connect:
-        name: CodeMagic  # Replace with your actual integration name
+      app_store_connect: CodeMagic  # The name you gave your App Store Connect integration
     environment:
       groups:
         - ios_creds # Ensure this group includes the necessary environment variables
@@ -53,7 +52,7 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        auth: integration  # Reference the App Store Connect API key integration
+        auth: integration  # Ensure this matches your integration reference
       email:
         recipients:
           - pita.sherwood@protonmail.com
