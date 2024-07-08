@@ -15,13 +15,7 @@ workflows:
         APP_STORE_APP_ID: 6520381456
         APP_STORE_CONNECT_ISSUER_ID: "9c9d7268-e70e-4477-a318-2e88b38a20e6"
         APP_STORE_CONNECT_KEY_IDENTIFIER: "9SJRL5BCG9"
-        APP_STORE_CONNECT_PRIVATE_KEY: |
-          -----BEGIN PRIVATE KEY-----
-          MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg5E1nWUlictXdvxHY
-          9PPmIBXA7J0wf68G12MlczHdTiKgCgYIKoZIzj0DAQehRANCAAQkWRoOV1K95q+m
-          fnwJQMDvcocMokGKJIipg9dJxCIuCKOnzAaTI075Sfu9aIxjbuxJNJpgM4kxbhJ0
-          oDJjjMjE
-          -----END PRIVATE KEY-----
+        APP_STORE_CONNECT_PRIVATE_KEY:
       xcode: 15.4
       cocoapods: default
     triggering:
