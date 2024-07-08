@@ -4,6 +4,10 @@
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
+flutter_application_path = File.expand_path('..', __dir__)
+flutter_root = File.expand_path('flutter', Dir.pwd)
+load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
+
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
