@@ -4,10 +4,12 @@ workflows:
     instance_type: mac_mini_m1
     working_directory: .
     integrations:
-      app_store_connect: AppleDeveloper # The updated name for your App Store Connect integration
+      app_store_connect:
+        # use the integration name you have
+        - integration_id: AppleDeveloper
     environment:
       groups:
-        - ios_creds # Ensure this group includes the necessary environment variables
+        - ios_creds # Ensure this group includes the necessary environment variables like APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_IDENTIFIER, and APP_STORE_CONNECT_PRIVATE_KEY
       vars:
         XCODE_WORKSPACE: "Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
@@ -15,7 +17,6 @@ workflows:
         APP_STORE_APP_ID: 6520381456
         APP_STORE_CONNECT_ISSUER_ID: "9c9d7268-e70e-4477-a318-2e88b38a20e6"
         APP_STORE_CONNECT_KEY_IDENTIFIER: "9SJRL5BCG9"
-        APP_STORE_CONNECT_PRIVATE_KEY:
       xcode: 15.4
       cocoapods: default
     triggering:
@@ -37,7 +38,7 @@ workflows:
           keychain initialize
       - name: Fetch signing files
         script: |
-          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create --issuer-id $APP_STORE_CONNECT_ISSUER_ID --key-id $APP_STORE_CONNECT_KEY_IDENTIFIER --private-key "$APP_STORE_CONNECT_PRIVATE_KEY"
+          app-store-connect fetch-signing-files $BUNDLE_ID --type IOS_APP_STORE --create --issuer-id $APP_STORE_CONNECT_ISSUER_ID --key-id $APP_STORE_CONNECT_KEY_IDENTIFIER --private-key @env:APP_STORE_CONNECT_PRIVATE_KEY
       - name: Use system default keychain
         script: |
           keychain add-certificates
