@@ -5,7 +5,7 @@ workflows:
     working_directory: .
     integrations:
       app_store_connect:
-        integration_id: AppleDeveloper
+        - integration_id: AppleDeveloper
     environment:
       groups:
         - ios_creds
