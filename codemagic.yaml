@@ -5,8 +5,7 @@ workflows:
     working_directory: .
     integrations:
       app_store_connect:
-        # use the integration name you have
-        - integration_id: AppleDeveloper
+        - integration_id: AppleDeveloper # Ensure this matches your integration name
     environment:
       groups:
         - ios_creds # Ensure this group includes the necessary environment variables like APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_IDENTIFIER, and APP_STORE_CONNECT_PRIVATE_KEY
@@ -17,6 +16,7 @@ workflows:
         APP_STORE_APP_ID: 6520381456
         APP_STORE_CONNECT_ISSUER_ID: "9c9d7268-e70e-4477-a318-2e88b38a20e6"
         APP_STORE_CONNECT_KEY_IDENTIFIER: "9SJRL5BCG9"
+        # Do not set the private key here; rely on the integration for security reasons
       xcode: 15.4
       cocoapods: default
     triggering:
@@ -56,7 +56,8 @@ workflows:
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
-        auth: integration  # Ensure this matches your integration reference
+        auth:
+          integration: AppleDeveloper
       email:
         recipients:
           - pita.sherwood@protonmail.com
