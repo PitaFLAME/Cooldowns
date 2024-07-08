@@ -11,7 +11,7 @@ workflows:
         XCODE_SCHEME: "Runner"
         BUNDLE_ID: "blue.pita.cooldowns"
         APP_STORE_APP_ID: 6520381456
-      xcode: 14.3
+      xcode: 15.4
       cocoapods: default
     triggering:
       events:
