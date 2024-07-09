@@ -1,35 +1,15 @@
-# Uncomment this line to define a global platform for your project
-platform :ios, '12.0'
-
-# CocoaPods analytics sends network stats synchronously affecting Flutter build latency.
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-project 'Runner', {
-  'Debug' => :debug,
-  'Profile' => :release,
-  'Release' => :release,
-}
-
-def flutter_install_ios_plugin_pods(flutter_application_path)
-  flutter_root = File.expand_path(File.join(flutter_application_path, '..', '..', 'flutter'))
-  load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
-end
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
 
 target 'Runner' do
+  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-  use_modular_headers!
 
-  flutter_install_ios_plugin_pods(File.dirname(File.realpath(__FILE__)))
+  # Pods for Runner
+
   target 'RunnerTests' do
     inherit! :search_paths
+    # Pods for testing
   end
 
-  # Add shared_preferences dependency
-  pod 'shared_preferences_foundation', :path => '.symlinks/plugins/shared_preferences/ios'
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
-  end
 end
