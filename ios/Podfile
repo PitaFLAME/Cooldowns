@@ -1,36 +1,20 @@
+# Podfile
 platform :ios, '12.0'
 
-# CocoaPods analytics sends network stats synchronously affecting Flutter build latency.
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+# ignore all warnings from all pods
+inhibit_all_warnings!
 
-project 'Runner', {
-  'Debug' => :debug,
-  'Profile' => :release,
-  'Release' => :release,
-}
-
-def flutter_install_ios_plugin_pods(flutter_application_path)
-  flutter_root = '/mnt/d/Pita/Documents/Cooldowns/flutter_windows_3.22.2-stable/flutter'
-  load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
-end
+flutter_application_path = File.expand_path('..', __dir__)
+flutter_root = ENV['FLUTTER_ROOT'] || File.expand_path(File.join(flutter_application_path, '..', '..', 'flutter'))
+load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
 
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-
-  flutter_install_ios_plugin_pods(File.dirname(File.realpath(__FILE__)))
+  
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
   target 'RunnerTests' do
     inherit! :search_paths
-  end
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    flutter_additional_ios_build_settings(target)
-  end
-
-  installer.pods_project.build_configurations.each do |config|
-    config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
   end
 end
