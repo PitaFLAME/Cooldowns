@@ -1,5 +1,5 @@
 name: cooldowns
-description: "A new Flutter project."
+description: "A small lifestyle project to help impulsivity."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  shared_preferences: ^2.0.9
+  shared_preferences: ^2.2.3
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -47,7 +48,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
