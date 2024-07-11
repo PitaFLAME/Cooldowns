@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,21 +44,27 @@ class _TimerHomePageState extends State<TimerHomePage> {
   }
 
   Future<void> _loadTimers() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? timersString = prefs.getString('timers');
-    if (timersString != null) {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/timers.json');
+    if (await file.exists()) {
+      final String timersString = await file.readAsString();
       final List<dynamic> timersJson = jsonDecode(timersString);
       setState(() {
-        _timers = timersJson.map((json) => TimerObject.fromJson(json)).toList();
+        _timers = timersJson.map((json) {
+          TimerObject timer = TimerObject.fromJson(json);
+          timer.fixEndTimeOrder();
+          return timer;
+        }).toList();
       });
     }
   }
 
   Future<void> _saveTimers() async {
-    final prefs = await SharedPreferences.getInstance();
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/timers.json');
     final String timersString =
         jsonEncode(_timers.map((timer) => timer.toJson()).toList());
-    await prefs.setString('timers', timersString);
+    await file.writeAsString(timersString);
   }
 
   void _addTimer(TimerObject timer) {
@@ -220,6 +227,11 @@ class TimerObject {
   }
 
   void fixEndTimeOrder() {
+    if (endTime.length == 1 && endTime[0] != null) {
+      if (DateTime.now().isAfter(endTime[0]!)) {
+        endTime[0] = null;
+      }
+    }
     for (int i = 0; i < endTime.length - 1; i++) {
       if (endTime[i] != null && DateTime.now().isAfter(endTime[i]!)) {
         endTime[i] = endTime[i + 1];
@@ -233,8 +245,7 @@ class TimerObject {
       return a.compareTo(b);
     });
 
-    remainingCharges =
-        endTime.length - endTime.where((endTime) => endTime == null).length;
+    remainingCharges = endTime.length - endTime.nonNulls.length;
   }
 
   Map<String, dynamic> toJson() {
@@ -614,9 +625,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       SizedBox(width: 10),
                       Text('Charges:',
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 16,
-                          )),
+                          style: TextStyle(fontSize: 16)),
                       SizedBox(width: 20),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40),
@@ -638,9 +647,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                 },
                               ),
                               Text('$_numCharges',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  )),
+                                  style: TextStyle(fontSize: 16)),
                               IconButton(
                                 icon: Icon(Icons.add),
                                 onPressed: () {
@@ -662,9 +669,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                         width: double.infinity,
                         child: Text('Recharge Style:',
                             textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 16,
-                            )),
+                            style: TextStyle(fontSize: 16)),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

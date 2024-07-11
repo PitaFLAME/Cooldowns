@@ -1,4 +1,4 @@
-package com.example.cooldowns
+package blue.pita.cooldowns
 
 import io.flutter.embedding.android.FlutterActivity
 
