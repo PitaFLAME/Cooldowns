@@ -55,7 +55,8 @@ class _TimerHomePageState extends State<TimerHomePage> {
 
   Future<void> _saveTimers() async {
     final prefs = await SharedPreferences.getInstance();
-    final String timersString = jsonEncode(_timers.map((timer) => timer.toJson()).toList());
+    final String timersString =
+        jsonEncode(_timers.map((timer) => timer.toJson()).toList());
     await prefs.setString('timers', timersString);
   }
 
@@ -109,7 +110,8 @@ class _TimerHomePageState extends State<TimerHomePage> {
                 final TimerObject? updatedTimer = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CreateTimerPage(timer: _timers[index]),
+                    builder: (context) =>
+                        CreateTimerPage(timer: _timers[index]),
                   ),
                 );
                 if (updatedTimer != null) {
@@ -201,7 +203,8 @@ class TimerObject {
       if (endTime[i] == null) {
         endTime[i] = DateTime.now().add(duration);
         if (rechargeType == RechargeType.series && i > 0) {
-          endTime[i] = endTime[i]!.add(endTime[i - 1]!.difference(DateTime.now()));
+          endTime[i] =
+              endTime[i]!.add(endTime[i - 1]!.difference(DateTime.now()));
         }
         remainingCharges--;
         break;
@@ -223,14 +226,15 @@ class TimerObject {
         endTime[i + 1] = null;
       }
     }
-    
+
     endTime.sort((a, b) {
       if (a == null) return 1;
       if (b == null) return -1;
       return a.compareTo(b);
     });
 
-    remainingCharges = endTime.length - endTime.where((endTime) => endTime == null).length;
+    remainingCharges =
+        endTime.length - endTime.where((endTime) => endTime == null).length;
   }
 
   Map<String, dynamic> toJson() {
@@ -248,7 +252,9 @@ class TimerObject {
   factory TimerObject.fromJson(Map<String, dynamic> json) {
     return TimerObject(
       name: json['name'],
-      endTime: (json['endTime'] as List).map((e) => e == null ? null : DateTime.parse(e)).toList(),
+      endTime: (json['endTime'] as List)
+          .map((e) => e == null ? null : DateTime.parse(e))
+          .toList(),
       charges: json['charges'],
       remainingCharges: json['remainingCharges'],
       iconPath: json['iconPath'],
@@ -263,15 +269,22 @@ class TimerDisplay extends StatelessWidget {
   final VoidCallback onTimerTap;
   final VoidCallback onTimerLongPress;
 
-  TimerDisplay({required this.timer, required this.onTimerTap, required this.onTimerLongPress});
+  TimerDisplay(
+      {required this.timer,
+      required this.onTimerTap,
+      required this.onTimerLongPress});
 
   @override
   Widget build(BuildContext context) {
-    final timeLeft = timer.endTime.first != null ? timer.endTime.first!.difference(DateTime.now()) : Duration.zero;
+    final timeLeft = timer.endTime.first != null
+        ? timer.endTime.first!.difference(DateTime.now())
+        : Duration.zero;
     final formattedTimeLeft = formatDuration(timeLeft);
 
     double elapsedPercentage = timer.isAvailable
-        ? 0 : (timer.endTime.first!.difference(DateTime.now())).inMilliseconds / timer.duration.inMilliseconds;
+        ? 0
+        : (timer.endTime.first!.difference(DateTime.now())).inMilliseconds /
+            timer.duration.inMilliseconds;
 
     return Container(
       child: InkWell(
@@ -299,30 +312,32 @@ class TimerDisplay extends StatelessWidget {
                         color: Colors.white70.withOpacity(0.15),
                       ),
                     ),
-                  if (timer.charges > 1 && timer.remainingCharges > 0) 
-                    Positioned (
+                  if (timer.charges > 1 && timer.remainingCharges > 0)
+                    Positioned(
                       top: 8,
                       left: 8,
                       child: CircleAvatar(
-                      radius: 14,
-                      backgroundColor: Colors.white70,
-                      child: CircleAvatar(
-                        radius: 12,
-                        backgroundColor: Color(0xFF3e3e3e),
-                        child: Text (
-                          timer.remainingCharges.toString(),
-                          style: TextStyle(color: Colors.white, fontSize: 14),
+                        radius: 14,
+                        backgroundColor: Colors.white70,
+                        child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Color(0xFF3e3e3e),
+                          child: Text(
+                            timer.remainingCharges.toString(),
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
             SizedBox(height: 10),
-            Text(timer.name, style: TextStyle(color: Colors.white, fontSize: 16)),
+            Text(timer.name,
+                style: TextStyle(color: Colors.white, fontSize: 16)),
             SizedBox(height: 5),
-            Text(timer.isAvailable ? '' : '$formattedTimeLeft', style: TextStyle(color: Colors.white70, fontSize: 14)),
+            Text(timer.isAvailable ? '' : '$formattedTimeLeft',
+                style: TextStyle(color: Colors.white70, fontSize: 14)),
           ],
         ),
       ),
@@ -388,7 +403,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
   }
 
   void _createTimer() {
-    final duration = Duration(days: _days, hours: _hours, minutes: _minutes, seconds: _seconds);
+    final duration = Duration(
+        days: _days, hours: _hours, minutes: _minutes, seconds: _seconds);
     final endTimeNulls = List<DateTime?>.filled(_numCharges, null);
     final newTimer = TimerObject(
       name: _name,
@@ -407,7 +423,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.timer == null ? 'Create a new Cooldown' : 'Edit Cooldown'),
+        title: Text(
+            widget.timer == null ? 'Create a new Cooldown' : 'Edit Cooldown'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -438,9 +455,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Days', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('Days',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                           SizedBox(height: 5),
-                          Text('$_days', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('$_days',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
@@ -456,7 +475,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                     _days = value;
                                   });
                                 },
-                                children: List<Widget>.generate(91, (int index) {
+                                children:
+                                    List<Widget>.generate(91, (int index) {
                                   return Text(index.toString());
                                 }),
                               ),
@@ -472,9 +492,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Hours', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('Hours',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                           SizedBox(height: 5),
-                          Text('$_hours', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('$_hours',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
@@ -490,7 +512,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                     _hours = value;
                                   });
                                 },
-                                children: List<Widget>.generate(25, (int index) {
+                                children:
+                                    List<Widget>.generate(25, (int index) {
                                   return Text(index.toString());
                                 }),
                               ),
@@ -506,9 +529,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Minutes', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('Minutes',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                           SizedBox(height: 5),
-                          Text('$_minutes', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('$_minutes',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
@@ -524,7 +549,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                     _minutes = value;
                                   });
                                 },
-                                children: List<Widget>.generate(61, (int index) {
+                                children:
+                                    List<Widget>.generate(61, (int index) {
                                   return Text(index.toString());
                                 }),
                               ),
@@ -540,9 +566,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Seconds', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('Seconds',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                           SizedBox(height: 5),
-                          Text('$_seconds', style: TextStyle(color: Color(0xFFe3e3e3))),
+                          Text('$_seconds',
+                              style: TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
@@ -558,7 +586,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                     _seconds = value;
                                   });
                                 },
-                                children: List<Widget>.generate(61, (int index) {
+                                children:
+                                    List<Widget>.generate(61, (int index) {
                                   return Text(index.toString());
                                 }),
                               ),
@@ -583,17 +612,15 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                   Row(
                     children: [
                       SizedBox(width: 10),
-                      Text(
-                        'Charges:', 
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 16,
-                        )),
+                      Text('Charges:',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 16,
+                          )),
                       SizedBox(width: 20),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40),
                         child: Container(
-                          
                           width: 110,
                           height: 60,
                           color: Color(0xFF3E3E3E),
@@ -610,7 +637,10 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                   });
                                 },
                               ),
-                              Text('$_numCharges', style: TextStyle(fontSize: 16,)),
+                              Text('$_numCharges',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  )),
                               IconButton(
                                 icon: Icon(Icons.add),
                                 onPressed: () {
@@ -621,7 +651,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                               ),
                             ],
                           ),
-                        ), 
+                        ),
                       ),
                     ],
                   ),
@@ -630,44 +660,48 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       SizedBox(height: 20),
                       Container(
                         width: double.infinity,
-                        child: Text('Recharge Style:', textAlign: TextAlign.left, style: TextStyle(fontSize: 16,)),
+                        child: Text('Recharge Style:',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 16,
+                            )),
                       ),
                       Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[ 
-                        Expanded(
-                          child: ListTile(
-                            title: const Text('Parallel'),
-                            leading: Radio<RechargeType>(
-                            value: RechargeType.parallel,
-                            groupValue: _chargeType,
-                            onChanged: (RechargeType? value) {
-                              setState(() {
-                                _chargeType = value!;
-                              });
-                            },
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('Parallel'),
+                              leading: Radio<RechargeType>(
+                                value: RechargeType.parallel,
+                                groupValue: _chargeType,
+                                onChanged: (RechargeType? value) {
+                                  setState(() {
+                                    _chargeType = value!;
+                                  });
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListTile(
-                          title: const Text('Series'),
-                          leading: Radio<RechargeType>(
-                            value: RechargeType.series,
-                            groupValue: _chargeType,
-                            onChanged: (RechargeType? value) {
-                              setState(() {
-                                _chargeType = value!;
-                              });
-                            },
+                          Expanded(
+                            child: ListTile(
+                              title: const Text('Series'),
+                              leading: Radio<RechargeType>(
+                                value: RechargeType.series,
+                                groupValue: _chargeType,
+                                onChanged: (RechargeType? value) {
+                                  setState(() {
+                                    _chargeType = value!;
+                                  });
+                                },
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ),
                 ],
-              ),
-              ],
               ),
               SizedBox(height: 40),
               Text('Select an Icon'),
@@ -690,11 +724,14 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: _iconPath == _customIconPaths[index] ? Colors.blue : Colors.transparent,
+                            color: _iconPath == _customIconPaths[index]
+                                ? Colors.blue
+                                : Colors.transparent,
                             width: 2,
                           ),
                         ),
-                        child: Image.asset(_customIconPaths[index], width: 40, height: 40),
+                        child: Image.asset(_customIconPaths[index],
+                            width: 40, height: 40),
                       ),
                     );
                   },
@@ -706,7 +743,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                     _createTimer();
                   }
                 },
-                child: Text('Create Timer'),
+                child: Text('Create Cooldown'),
               ),
             ],
           ),
