@@ -11,22 +11,26 @@ void main() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]).then((_) {
-    runApp(TimerApp());
+    runApp(const TimerApp());
   });
 }
 
 class TimerApp extends StatelessWidget {
+  const TimerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Cooldown Timer',
       theme: ThemeData.dark(),
-      home: TimerHomePage(),
+      home: const TimerHomePage(),
     );
   }
 }
 
 class TimerHomePage extends StatefulWidget {
+  const TimerHomePage({super.key});
+
   @override
   _TimerHomePageState createState() => _TimerHomePageState();
 }
@@ -38,7 +42,7 @@ class _TimerHomePageState extends State<TimerHomePage> {
   void initState() {
     super.initState();
     _loadTimers();
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
       _checkTimers();
     });
   }
@@ -110,8 +114,8 @@ class _TimerHomePageState extends State<TimerHomePage> {
         return Wrap(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Edit'),
+              leading: const Icon(Icons.edit),
+              title: const Text('Edit'),
               onTap: () async {
                 Navigator.pop(context);
                 final TimerObject? updatedTimer = await Navigator.push(
@@ -127,8 +131,8 @@ class _TimerHomePageState extends State<TimerHomePage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.delete),
-              title: Text('Delete'),
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete'),
               onTap: () {
                 Navigator.pop(context);
                 _deleteTimer(index);
@@ -144,7 +148,7 @@ class _TimerHomePageState extends State<TimerHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cooldowns'),
+        title: const Text('Cooldowns'),
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -161,19 +165,19 @@ class _TimerHomePageState extends State<TimerHomePage> {
             onTimerLongPress: () => _showEditMenu(index),
           );
         },
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final TimerObject? newTimer = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => CreateTimerPage()),
+            MaterialPageRoute(builder: (context) => const CreateTimerPage()),
           );
           if (newTimer != null) {
             _addTimer(newTimer);
           }
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -280,8 +284,8 @@ class TimerDisplay extends StatelessWidget {
   final VoidCallback onTimerTap;
   final VoidCallback onTimerLongPress;
 
-  TimerDisplay(
-      {required this.timer,
+  const TimerDisplay(
+      {super.key, required this.timer,
       required this.onTimerTap,
       required this.onTimerLongPress});
 
@@ -317,7 +321,7 @@ class TimerDisplay extends StatelessWidget {
                     Positioned(
                       bottom: 0,
                       child: AnimatedContainer(
-                        duration: Duration(milliseconds: 500),
+                        duration: const Duration(milliseconds: 500),
                         width: 140,
                         height: 140 * elapsedPercentage,
                         color: Colors.white70.withOpacity(0.15),
@@ -332,10 +336,10 @@ class TimerDisplay extends StatelessWidget {
                         backgroundColor: Colors.white70,
                         child: CircleAvatar(
                           radius: 12,
-                          backgroundColor: Color(0xFF3e3e3e),
+                          backgroundColor: const Color(0xFF3e3e3e),
                           child: Text(
                             timer.remainingCharges.toString(),
-                            style: TextStyle(color: Colors.white, fontSize: 14),
+                            style: const TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ),
                       ),
@@ -343,12 +347,12 @@ class TimerDisplay extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(timer.name,
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-            SizedBox(height: 5),
-            Text(timer.isAvailable ? '' : '$formattedTimeLeft',
-                style: TextStyle(color: Colors.white70, fontSize: 14)),
+                style: const TextStyle(color: Colors.white, fontSize: 16)),
+            const SizedBox(height: 5),
+            Text(timer.isAvailable ? '' : formattedTimeLeft,
+                style: const TextStyle(color: Colors.white70, fontSize: 14)),
           ],
         ),
       ),
@@ -373,7 +377,7 @@ class TimerDisplay extends StatelessWidget {
 class CreateTimerPage extends StatefulWidget {
   final TimerObject? timer;
 
-  CreateTimerPage({this.timer});
+  const CreateTimerPage({super.key, this.timer});
 
   @override
   _CreateTimerPageState createState() => _CreateTimerPageState();
@@ -438,15 +442,15 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
             widget.timer == null ? 'Create a new Cooldown' : 'Edit Cooldown'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: const InputDecoration(labelText: 'Name'),
                 initialValue: _name,
-                style: TextStyle(fontSize: 28),
+                style: const TextStyle(fontSize: 28),
                 onChanged: (value) {
                   setState(() {
                     _name = value;
@@ -466,18 +470,18 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Days',
+                          const Text('Days',
                               style: TextStyle(color: Color(0xFFe3e3e3))),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text('$_days',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                              style: const TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return Container(
+                            return SizedBox(
                               height: 250,
                               child: CupertinoPicker(
                                 itemExtent: 32,
@@ -497,24 +501,24 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CupertinoButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Hours',
+                          const Text('Hours',
                               style: TextStyle(color: Color(0xFFe3e3e3))),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text('$_hours',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                              style: const TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return Container(
+                            return SizedBox(
                               height: 250,
                               child: CupertinoPicker(
                                 itemExtent: 32,
@@ -534,24 +538,24 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CupertinoButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Minutes',
+                          const Text('Minutes',
                               style: TextStyle(color: Color(0xFFe3e3e3))),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text('$_minutes',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                              style: const TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return Container(
+                            return SizedBox(
                               height: 250,
                               child: CupertinoPicker(
                                 itemExtent: 32,
@@ -571,24 +575,24 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CupertinoButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Seconds',
+                          const Text('Seconds',
                               style: TextStyle(color: Color(0xFFe3e3e3))),
-                          SizedBox(height: 5),
+                          const SizedBox(height: 5),
                           Text('$_seconds',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                              style: const TextStyle(color: Color(0xFFe3e3e3))),
                         ],
                       ),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           builder: (BuildContext context) {
-                            return Container(
+                            return SizedBox(
                               height: 250,
                               child: CupertinoPicker(
                                 itemExtent: 32,
@@ -610,9 +614,9 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               ExpansionTile(
-                title: Text('Advanced'),
+                title: const Text('Advanced'),
                 initiallyExpanded: _isChargeSectionExpanded,
                 onExpansionChanged: (expanded) {
                   setState(() {
@@ -622,22 +626,22 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 10),
-                      Text('Charges:',
+                      const SizedBox(width: 10),
+                      const Text('Charges:',
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 16)),
-                      SizedBox(width: 20),
+                      const SizedBox(width: 20),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40),
                         child: Container(
                           width: 110,
                           height: 60,
-                          color: Color(0xFF3E3E3E),
+                          color: const Color(0xFF3E3E3E),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                icon: Icon(Icons.remove),
+                                icon: const Icon(Icons.remove),
                                 onPressed: () {
                                   setState(() {
                                     if (_numCharges > 1) {
@@ -647,9 +651,9 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                 },
                               ),
                               Text('$_numCharges',
-                                  style: TextStyle(fontSize: 16)),
+                                  style: const TextStyle(fontSize: 16)),
                               IconButton(
-                                icon: Icon(Icons.add),
+                                icon: const Icon(Icons.add),
                                 onPressed: () {
                                   setState(() {
                                     _numCharges++;
@@ -664,8 +668,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                   ),
                   Column(
                     children: [
-                      SizedBox(height: 20),
-                      Container(
+                      const SizedBox(height: 20),
+                      const SizedBox(
                         width: double.infinity,
                         child: Text('Recharge Style:',
                             textAlign: TextAlign.left,
@@ -708,12 +712,12 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 40),
-              Text('Select an Icon'),
-              SizedBox(height: 20),
+              const SizedBox(height: 40),
+              const Text('Select an Icon'),
+              const SizedBox(height: 20),
               Expanded(
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 4,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
@@ -748,7 +752,7 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                     _createTimer();
                   }
                 },
-                child: Text('Create Cooldown'),
+                child: const Text('Create Cooldown'),
               ),
             ],
           ),
