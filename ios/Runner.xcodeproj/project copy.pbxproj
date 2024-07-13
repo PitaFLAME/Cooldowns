@@ -95,7 +95,6 @@
 			children = (
 				4FF214B2F7A5FB3D1F4E5BDD /* Pods_Runner.framework */,
 				122D6A50223960673266D5B5 /* Pods_RunnerTests.framework */,
-                c7c81ac4-3044-4075-bb08-d451f8abe305 /* Flutter.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
