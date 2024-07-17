@@ -10,10 +10,13 @@ project 'Runner', {
   'Release' => :release,
 }
 
+
 flutter_application_path = File.join(File.dirname(File.realpath(__FILE__)), '..')
-flutter_root = ENV['FLUTTER_ROOT'] || File.expand_path(File.join(flutter_application_path, '..', '..', 'flutter'))
+# Convert Windows-style path to Unix-style for WSL environments
+flutter_root = '/mnt/d/Pita/Documents/Cooldowns/flutter_windows_3.22.2-stable/flutter'
 puts "Using flutter_root at: #{flutter_root}" # This line helps to debug the flutter_root path
 load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
+
 
 target 'Runner' do
   use_frameworks!
