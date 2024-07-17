@@ -1,7 +1,5 @@
-# Uncomment this line to define a global platform for your project
 platform :ios, '12.0'
 
-# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 project 'Runner', {
@@ -10,13 +8,10 @@ project 'Runner', {
   'Release' => :release,
 }
 
-
 flutter_application_path = File.join(File.dirname(File.realpath(__FILE__)), '..')
-# Convert Windows-style path to Unix-style for WSL environments
-flutter_root = '/mnt/d/Pita/Documents/Cooldowns/flutter_windows_3.22.2-stable/flutter'
-puts "Using flutter_root at: #{flutter_root}" # This line helps to debug the flutter_root path
+flutter_root = ENV['FLUTTER_ROOT'] || '/mnt/d/Pita/Documents/Cooldowns/flutter_windows_3.22.2-stable/flutter'
+puts "Using flutter_root at: #{flutter_root}"
 load File.join(flutter_root, 'packages', 'flutter_tools', 'bin', 'podhelper.rb')
-
 
 target 'Runner' do
   use_frameworks!
@@ -25,7 +20,6 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
-# Ensure that your Podfile includes the post_install hook to configure iOS platform targets
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
