@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:io';
 
 import 'cooldownObject.dart';
@@ -131,13 +132,10 @@ class _TimerHomePageState extends State<TimerHomePage> {
       appBar: AppBar(
         title: const Text('Cooldowns'),
       ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 1,
-        ),
+      body: AlignedGridView.count(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
         itemCount: _timers.length,
         itemBuilder: (context, index) {
           return TimerDisplay(
@@ -189,13 +187,14 @@ class TimerDisplay extends StatelessWidget {
             timer.duration.inMilliseconds;
 
     return Container(
-      child: InkWell(
-        onTap: timer.isAvailable ? onTimerTap : null,
-        onLongPress: onTimerLongPress,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
+      child: Flex(
+        direction: Axis.vertical,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InkWell(
+            onTap: timer.isAvailable ? onTimerTap : null,
+            onLongPress: onTimerLongPress,
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(32.0),
               child: Stack(
                 children: [
@@ -235,14 +234,18 @@ class TimerDisplay extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
-            Text(timer.name,
+          ),
+          const SizedBox(height: 10),
+          FittedBox(
+            child: Text(timer.name,
                 style: const TextStyle(color: Colors.white, fontSize: 16)),
-            const SizedBox(height: 5),
-            Text(timer.isAvailable ? '' : formattedTimeLeft,
+          ),
+          const SizedBox(height: 5),
+          FittedBox(
+            child: Text(timer.isAvailable ? ' ' : formattedTimeLeft,
                 style: const TextStyle(color: Colors.white70, fontSize: 14)),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
