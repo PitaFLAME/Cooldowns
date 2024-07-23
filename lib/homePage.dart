@@ -10,6 +10,21 @@ import 'dart:io';
 import 'cooldownObject.dart';
 import 'createCooldown.dart';
 
+class TimerApp extends StatelessWidget {
+  const TimerApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Cooldown Timer',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Color(0xFF0A0A0A),
+      ),
+      home: const TimerHomePage(),
+    );
+  }
+}
+
 class TimerHomePage extends StatefulWidget {
   const TimerHomePage({super.key});
 
@@ -130,7 +145,8 @@ class _TimerHomePageState extends State<TimerHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cooldowns'),
+        title: const Text('Cooldowns', style: TextStyle(color: Colors.white)),
+        backgroundColor: Color(0xFF0A0A0A),
       ),
       body: AlignedGridView.count(
         crossAxisCount: 2,
@@ -147,6 +163,7 @@ class _TimerHomePageState extends State<TimerHomePage> {
         padding: const EdgeInsets.all(10),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 184, 225, 239),
         onPressed: () async {
           final TimerObject? newTimer = await Navigator.push(
             context,
@@ -162,7 +179,6 @@ class _TimerHomePageState extends State<TimerHomePage> {
   }
 }
 
-// Main Display Stack
 class TimerDisplay extends StatelessWidget {
   final TimerObject timer;
   final VoidCallback onTimerTap;
@@ -186,6 +202,7 @@ class TimerDisplay extends StatelessWidget {
         : (timer.endTime.first!.difference(DateTime.now())).inMilliseconds /
             timer.duration.inMilliseconds;
 
+    // main Cooldown Display widget
     return Container(
       child: Flex(
         direction: Axis.vertical,

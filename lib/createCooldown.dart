@@ -54,7 +54,15 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
 
   void _createTimer() {
     final duration = Duration(
-        days: _days, hours: _hours, minutes: _minutes, seconds: _seconds);
+                    days: _days,
+                    hours: _hours,
+                    minutes: _minutes,
+                    seconds: _seconds)
+                .inSeconds >
+            0
+        ? Duration(
+            days: _days, hours: _hours, minutes: _minutes, seconds: _seconds)
+        : Duration(seconds: 10);
     final endTimeNulls = List<DateTime?>.filled(_numCharges, null);
     final newTimer = TimerObject(
       name: _name,
@@ -73,8 +81,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF0A0A0A),
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-            widget.timer == null ? 'Create a new Cooldown' : 'Edit Cooldown'),
+            widget.timer == null ? 'Create a new Cooldown' : 'Edit Cooldown',
+            style: TextStyle(color: Colors.white)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,9 +94,15 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
           child: Column(
             children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Name'),
+                cursorColor: Colors.white,
+                decoration: const InputDecoration(
+                    labelText: 'Name',
+                    labelStyle: TextStyle(color: Colors.white),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    )),
                 initialValue: _name,
-                style: const TextStyle(fontSize: 28),
+                style: const TextStyle(fontSize: 28, color: Colors.white),
                 onChanged: (value) {
                   setState(() {
                     _name = value;
@@ -105,8 +122,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Days',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text('Days',
+                                style: TextStyle(color: Color(0xFFe3e3e3))),
+                          ),
                           const SizedBox(height: 5),
                           Text('$_days',
                               style: const TextStyle(color: Color(0xFFe3e3e3))),
@@ -142,8 +162,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Hours',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text('Hours',
+                                style: TextStyle(color: Color(0xFFe3e3e3))),
+                          ),
                           const SizedBox(height: 5),
                           Text('$_hours',
                               style: const TextStyle(color: Color(0xFFe3e3e3))),
@@ -179,8 +202,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Minutes',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text('Minutes',
+                                style: TextStyle(color: Color(0xFFe3e3e3))),
+                          ),
                           const SizedBox(height: 5),
                           Text('$_minutes',
                               style: const TextStyle(color: Color(0xFFe3e3e3))),
@@ -216,8 +242,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Seconds',
-                              style: TextStyle(color: Color(0xFFe3e3e3))),
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Text('Seconds',
+                                style: TextStyle(color: Color(0xFFe3e3e3))),
+                          ),
                           const SizedBox(height: 5),
                           Text('$_seconds',
                               style: const TextStyle(color: Color(0xFFe3e3e3))),
@@ -251,20 +280,22 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
               ),
               const SizedBox(height: 30),
               ExpansionTile(
-                title: const Text('Advanced'),
+                title: const Text('Advanced',
+                    style: TextStyle(color: Colors.white)),
                 initiallyExpanded: _isChargeSectionExpanded,
                 onExpansionChanged: (expanded) {
                   setState(() {
                     _isChargeSectionExpanded = expanded;
                   });
                 },
+                iconColor: Colors.white,
                 children: [
                   Row(
                     children: [
                       const SizedBox(width: 10),
                       const Text('Charges:',
                           textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 16)),
+                          style: TextStyle(fontSize: 16, color: Colors.white)),
                       const SizedBox(width: 20),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(40),
@@ -276,7 +307,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.remove),
+                                icon: const Icon(Icons.remove,
+                                    color: Colors.white),
                                 onPressed: () {
                                   setState(() {
                                     if (_numCharges > 1) {
@@ -286,9 +318,11 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                                 },
                               ),
                               Text('$_numCharges',
-                                  style: const TextStyle(fontSize: 16)),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white)),
                               IconButton(
-                                icon: const Icon(Icons.add),
+                                icon:
+                                    const Icon(Icons.add, color: Colors.white),
                                 onPressed: () {
                                   setState(() {
                                     _numCharges++;
@@ -308,15 +342,18 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                         width: double.infinity,
                         child: Text('Recharge Style:',
                             textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 16)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white)),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Expanded(
                             child: ListTile(
-                              title: const Text('Parallel'),
+                              title: const Text('Parallel',
+                                  style: TextStyle(color: Colors.white)),
                               leading: Radio<RechargeType>(
+                                activeColor: Color(0xFF598392),
                                 value: RechargeType.parallel,
                                 groupValue: _chargeType,
                                 onChanged: (RechargeType? value) {
@@ -329,8 +366,10 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                           ),
                           Expanded(
                             child: ListTile(
-                              title: const Text('Series'),
+                              title: const Text('Series',
+                                  style: TextStyle(color: Colors.white)),
                               leading: Radio<RechargeType>(
+                                activeColor: Color(0xFF598392),
                                 value: RechargeType.series,
                                 groupValue: _chargeType,
                                 onChanged: (RechargeType? value) {
@@ -348,7 +387,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                 ],
               ),
               const SizedBox(height: 40),
-              const Text('Select an Icon'),
+              const Text('Select an Icon',
+                  style: TextStyle(color: Colors.white)),
               const SizedBox(height: 20),
               Expanded(
                 child: GridView.builder(
@@ -387,7 +427,8 @@ class _CreateTimerPageState extends State<CreateTimerPage> {
                     _createTimer();
                   }
                 },
-                child: const Text('Create Cooldown'),
+                child: const Text('Create Cooldown',
+                    style: TextStyle(color: Color(0xFF0A0A0A))),
               ),
             ],
           ),
