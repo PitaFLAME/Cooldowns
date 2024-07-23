@@ -11,16 +11,3 @@ void main() {
     runApp(const TimerApp());
   });
 }
-
-class TimerApp extends StatelessWidget {
-  const TimerApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Cooldowns',
-      theme: ThemeData.dark(),
-      home: const TimerHomePage(),
-    );
-  }
-}
